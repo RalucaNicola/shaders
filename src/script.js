@@ -4,6 +4,8 @@ import * as dat from 'lil-gui'
 import vertexShader from './shaders/vertex.glsl'
 import fragmentShader from './shaders/fragment.glsl'
 
+const clock = new THREE.Clock();
+
 /**
  * Base
  */
@@ -24,6 +26,9 @@ const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
 // Material
 const material = new THREE.ShaderMaterial({
+    uniforms: {
+        uTime: { value: 0 }
+    },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
     side: THREE.DoubleSide
@@ -79,9 +84,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
+const degToRad = (deg) => {
+    return deg * (Math.PI / 180);
+}
 const tick = () => {
     // Update controls
-    controls.update()
+    controls.update();
+    material.uniforms.uTime.value = clock.getElapsedTime();
 
     // Render
     renderer.render(scene, camera)

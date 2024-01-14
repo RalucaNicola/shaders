@@ -1,5 +1,7 @@
 varying vec2 vuv;
 
+uniform float uTime;
+
 #define PI 3.14159265
 
 float random(vec2 st) {
@@ -13,9 +15,19 @@ return vec2(
     );
 }
     
-
 void main()
 {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    float distance = length(vec2(0.5, 0.5) - vuv);
+    vec3 pink = vec3(0.9, 0.2, 0.6);
+    vec3 purple = vec3(0.6, 0.2, 0.9);
+    vec3 blue = vec3(0.3, 0.6, 0.9);
+    vec3 color = vec3(0.0);
+    float circleValuePink = step(distance, 0.1 + abs(sin(uTime)) * 0.25);
+    float circleValuePurple = step(distance, 0.06 + abs(sin(uTime)) * 0.20);
+    float circleValueBlue = step(distance, 0.02 + abs(sin(uTime)) * 0.10);
+    color = mix(color, pink, circleValuePink);
+    color = mix(color, purple, circleValuePurple);
+    color = mix(color, blue, circleValueBlue);
+    gl_FragColor = vec4(color, 1.0);
 }
 
